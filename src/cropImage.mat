@@ -1,0 +1,33 @@
+function cropped = cropFigure(fig, left, right, top, bottom)
+% cropFigure  Crops pixels from a figure's displayed image
+%
+%   cropped = cropFigure(fig, left, right, top, bottom)
+%
+%   fig    : figure handle
+%   left   : pixels to remove from left
+%   right  : pixels to remove from right
+%   top    : pixels to remove from top
+%   bottom : pixels to remove from bottom
+%
+%   Returns the cropped image data
+
+    if any([left right top bottom] < 0)
+        error('Crop values must be non-negative');
+    end
+
+    % Capture the figure content
+    frame = getframe(fig);
+    img = frame.cdata;
+
+    [rows, cols, ~] = size(img);
+
+    newWidth  = cols - left - right;
+    newHeight = rows - top - bottom;
+
+    if newWidth <= 0 || newHeight <= 0
+        error('Cropping too large — image would disappear 🫥');
+    end
+
+    cropped = img(top+1 : rows-bottom, left+1 : cols-right, :);
+end
+
